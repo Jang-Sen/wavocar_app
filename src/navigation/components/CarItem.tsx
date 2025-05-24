@@ -6,7 +6,7 @@ import { Text } from '@react-navigation/elements';
 const CarItem = ({ car }) => {
   const { navigate } = useNavigation();
 
-  console.log(car);
+  // console.log(car);
 
   return (
     <TouchableOpacity onPress={() => navigate('CarDetail', { id: car.id })}>

@@ -1,124 +1,95 @@
-import { FlatList, StyleSheet, View } from 'react-native';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
-import CarItem from '../components/CarItem';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Text } from '@react-navigation/elements';
 
 export function Home() {
-  const navigation = useNavigation();
-  const [cars, setCars] = useState([]);
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const getCars = async () => {
-    try {
-      const { data } = await axios.get(
-        'http://localhost:81/api/v1/car/findAll?take=10',
-      );
-      console.log(data);
-
-      setCars(data.body.data);
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
-  useEffect(() => {
-    getCars();
-  }, []);
-
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      {/* 1. 위치 */}
+      <View style={styles.locationContainer}>
+        <Text style={styles.locationText}>📍 현재 위치: 서울 강남구</Text>
+      </View>
+
+      {/* 2. 검색창 */}
+      <TouchableOpacity style={styles.searchBox}>
+        <Text style={styles.searchPlaceholder}>어떤 차량을 찾고 있나요?</Text>
+      </TouchableOpacity>
+
+      {/* 3. 예약 가능한 차량 섹션 */}
+      <Text style={styles.sectionTitle}>예약 가능한 차량</Text>
       <FlatList
-        data={cars}
-        renderItem={({ item }) => <CarItem car={item} />}
-        keyExtractor={(item) => item.id}
         horizontal
+        // data={availableCars}
+        keyExtractor={(item) => item.id}
+        // renderItem={({ item }) => <CarCard car={item} />}
+        showsHorizontalScrollIndicator={false}
       />
 
-      {/*<Text>{cars.length}</Text>*/}
-      {/*<ScrollView horizontal={true}>*/}
-      {/*    {cars?.map((car, index) => (*/}
-      {/*        <TouchableOpacity onPress={() => navigation.navigate('CarDetail', {id: car.id})}>*/}
-      {/*            <View style={{margin: 10, padding: 5, alignItems: 'center'}}>*/}
-      {/*                <Image*/}
-      {/*                    source={car.carImgs ? car.carImgs[0] : 'https://png.pngtree.com/png-vector/20190418/ourmid/pngtree-bin-file-document-icon-png-image_951413.jpg'}*/}
-      {/*                    style={{*/}
-      {/*                        width: 60,*/}
-      {/*                        height: 60,*/}
-      {/*                    }}*/}
-      {/*                />*/}
-      {/*                <Text>*/}
-      {/*                    {car.carName}*/}
-      {/*                </Text>*/}
-      {/*                <Text>*/}
-      {/*                    $ {car.price}*/}
-      {/*                </Text>*/}
-      {/*                <Text>*/}
-      {/*                    {car.grade}*/}
-      {/*                </Text>*/}
-      {/*            </View>*/}
-      {/*        </TouchableOpacity>*/}
-      {/*    ))}*/}
-      {/*</ScrollView>*/}
-    </View>
+      {/* 4. 배너/이벤트 */}
+      <View style={styles.banner}>
+        <Text style={styles.bannerText}>🚗 WAVOCAR 할인 이벤트 진행 중!</Text>
+      </View>
+    </SafeAreaView>
   );
 }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         // justifyContent: 'center',
-//         // alignItems: 'center',
-//         gap: 10,
-//     },
-// });
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    gap: 10,
+    backgroundColor: '#fff',
+    padding: 16,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  locationContainer: {
+    marginBottom: 12,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+  locationText: {
+    fontSize: 16,
+    color: '#333',
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+  searchBox: {
+    backgroundColor: '#eee',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 20,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
+  searchPlaceholder: {
+    color: '#888',
   },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
+    marginBottom: 12,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  banner: {
+    backgroundColor: '#d0ebff',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 30,
   },
+  bannerText: {
+    fontSize: 16,
+    color: '#1c7ed6',
+  },
+  // container: {
+  //   flex: 1,
+  //   paddingTop: StatusBar.currentHeight,
+  //   marginHorizontal: 16,
+  // },
+  // item: {
+  //   backgroundColor: '#f9c2ff',
+  //   padding: 20,
+  //   marginVertical: 8,
+  // },
+  // header: {
+  //   fontSize: 32,
+  //   backgroundColor: '#fff',
+  // },
+  // title: {
+  //   fontSize: 24,
+  // },
 });
