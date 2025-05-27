@@ -22,6 +22,7 @@ const HomeTabs = createBottomTabNavigator({
       screen: CarList,
       options: {
         title: 'WAVOCAR',
+        headerShown: false,
         tabBarIcon: ({ color, size }) => (
           // <FontAwesome5 name="car" size={24} color={color} />
           <Image
@@ -99,10 +100,10 @@ const RootStack = createNativeStackNavigator({
       linking: {
         path: 'cars/:id',
         parse: {
-          id: (value) => parseInt(value, 10),
+          id: (value) => value,
         },
         stringify: {
-          id: (value) => value.toString(),
+          id: (value) => value,
         },
       },
     },

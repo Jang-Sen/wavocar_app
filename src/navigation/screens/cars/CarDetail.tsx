@@ -8,62 +8,49 @@ import {
 } from 'react-native';
 import { Text } from '@react-navigation/elements';
 import { useRoute } from '@react-navigation/native';
-import { useCarDetail } from '../../../hooks/useCarDetail';
+import { useCarDetail } from './hooks/useCarDetail';
 
 const CarDetail = () => {
-  const route = useRoute();
+  const { params } = useRoute();
 
-  const { id } = route.params;
-
-  // const {
-  //   data: car,
-  //   isLoading,
-  //   isError,
-  // } = useQuery({
-  //   queryKey: ['car'],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(
-  //       `http://localhost:81/api/v1/car/find/${id}`,
-  //     );
-  //
-  //     console.log(data.body);
-  //
-  //     return data.body;
-  //   },
-  // });
+  const { id } = params;
 
   const { data: car, isLoading, isError } = useCarDetail(id);
+
+  const carImgURI =
+    car?.carImgs?.[0] ??
+    'https://png.pngtree.com/png-vector/20190628/ourmid/pngtree-empty-box-icon-for-your-project-png-image_1521417.jpg';
 
   if (isLoading) return <Text>로딩 중...</Text>;
   if (isError) return <Text>에러가 발생했습니다.</Text>;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {car.carImgs && (
+      {car?.carImgs && (
         <Image
-          source={{ uri: car.carImgs[0] }} // 배열로 온다고 가정
+          source={{ uri: carImgURI }}
           style={styles.carImage}
           resizeMode="cover"
         />
       )}
 
       <View style={styles.infoCard}>
-        <Text style={styles.infoTitle}>{car.carName}</Text>
-        <Text style={styles.infoDetail}>차량번호: {car.carNo}</Text>
-        <Text style={styles.infoDetail}>연식: {car.carYear}</Text>
+        <Text style={styles.infoTitle}>{car?.carName}</Text>
+        <Text style={styles.infoDetail}>차량번호: {car?.carNo}</Text>
+        <Text style={styles.infoDetail}>연식: {car?.carYear}</Text>
         <Text style={styles.infoDetail}>
-          주행거리: {car.mileage.toLocaleString()} km
+          주행거리: {car?.mileage.toLocaleString()} km
         </Text>
-        <Text style={styles.infoDetail}>연료: {car.fuel}</Text>
-        <Text style={styles.infoDetail}>배기량: {car.displacement} cc</Text>
-        <Text style={styles.infoDetail}>등급: {car.grade}</Text>
-        <Text style={styles.infoDetail}>변속기: {car.transmission}</Text>
+        <Text style={styles.infoDetail}>연료: {car?.fuel}</Text>
+        <Text style={styles.infoDetail}>배기량: {car?.displacement} cc</Text>
+        <Text style={styles.infoDetail}>등급: {car?.grade}</Text>
+        <Text style={styles.infoDetail}>변속기: {car?.transmission}</Text>
         <Text style={styles.infoDetail}>
-          가격: {car.price.toLocaleString()} 만원
+          가격: {car?.price.toLocaleString()} 만원
         </Text>
       </View>
 
-      {car.carStatus === 'available' ? (
+      {car?.carStatus === 'available' ? (
         <TouchableOpacity style={styles.reserveButton}>
           <Text style={styles.reserveText}>예약하기</Text>
         </TouchableOpacity>
